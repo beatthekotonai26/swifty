@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Address Checker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #f5f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+        }
+        h1 {
+            color: #6c5ce7;
+            margin-bottom: 20px;
+        }
+        .ip-display {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #b2bec3;
+        }
+        .loader {
+            border: 5px solid #1a1a1a;
+            border-radius: 50%;
+            border-top: 5px solid #6c5ce7;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IP Address Checker</h1>
+        <p>Your current IP address is:</p>
+        <div id="ip-display" class="ip-display">
+            <div class="loader"></div>
+            <p>Loading your IP address...</p>
+        </div>
+        <div class="info">
+            <p>This page uses a third-party service to detect your IP address. No information is stored or logged.</p>
+            <p>Server IP addresses for this site:</p>
+            <ul id="server-ips" style="list-style-type: none; padding: 0;">
+                <li>Loading server IPs...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Function to get the user's IP address
+        async function getIPAddress() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                document.getElementById('ip-display').innerHTML = data.ip;
+                
+                // Add server IPs
+                const serverIPs = [
+                    "185.199.108.153",
+                    "185.199.109.153",
+                    "185.199.110.153",
+                    "185.199.111.153"
+                ];
+                
+                const serverIPsList = document.getElementById('server-ips');
+                serverIPsList.innerHTML = '';
+                
+                serverIPs.forEach(ip => {
+                    const li = document.createElement('li');
+                    li.textContent = ip;
+                    serverIPsList.appendChild(li);
+                });
+            } catch (error) {
+                document.getElementById('ip-display').innerHTML = 'Error fetching IP address. Please try again later.';
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = getIPAddress;
+    </script>
+</body>
+</html> 
